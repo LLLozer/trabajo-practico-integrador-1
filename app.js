@@ -9,7 +9,8 @@ dotenv.config();
 
 const PORT = 3004;
 const corsOptions = {
-  origin: "https://localhost:3004",
+  origin: `https://localhost:3004`,
+  credentials: true
 };
 
 app.use(express.json());
