@@ -1,10 +1,9 @@
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { UserModel } from "../models/user.model.js";
 import { generateToken } from "../helpers/jwt.helper.js";
 
 export const register = async (req, res) => {
-  const { username, email, password, role } = req.body;
+  const { username, email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await UserModel.create({
@@ -24,13 +23,17 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { username, email } = req.body;
+  const { username, password } = req.body;
   try {
     const user = await UserModel.findOne({
-      where: { username: username, email: email },
+      where: { username: username },
     });
     if (!user) {
       return res.status(401).json({ message: "Credenciales inválidas." });
+    }
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({ message: "Credenciales inválidas" });
     }
 
     const token = generateToken(user); //Generar el token usando la función desde jwt.helper.js//
