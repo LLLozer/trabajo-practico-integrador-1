@@ -1,7 +1,15 @@
-import jwt from "jsonwebtoken";
+import { verifyToken } from "../helpers/jwt.helper.js";
 
 export const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  req.userLogged = decoded;
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ message: "No autenticado" });
+    }
+    const decoded = verifyToken(token);
+    req.userLogged = decoded;
+    next();
+  } catch (error) {
+    res.status(500).json({ message: "Error interno en el servidor" });
+  }
 };

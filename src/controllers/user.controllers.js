@@ -1,45 +1,6 @@
 import { UserModel } from "../models/user.model.js";
 import { matchedData } from "express-validator";
 
-export const createUser = async (req, res) => {
-  const { username, email, password } = req.body;
-  try {
-    const checkIfEmailExists = await UserModel.findOne({
-      where: { email: email, id: { [Op.ne]: id } },
-    });
-    if (checkIfEmailExists) {
-      return res.status(400).json({
-        message: "Error: Ese email ya existe",
-        error: "Bad request",
-        status: 400,
-      });
-    }
-    const emailLength = await email.length;
-    const nameLength = await username.length;
-    const passwordLength = await password.length;
-    if (emailLength > 100 || nameLength > 20 || passwordLength > 255) {
-      return res.status(400).json({
-        message: "Error: Los atributos superan los 100 caracteres",
-        error: "Bad request",
-        status: 400,
-      });
-    }
-    if (!username || !email || !password) {
-      return res.status(400).json({
-        message: "Error: Algunos campos están vacíos",
-        error: "Bad request",
-        status: 400,
-      });
-    }
-    const validatedData = matchedData(req, { locations: ["body"] });
-    console.log("Los datos validados son:", validatedData);
-    const createNewUser = await UserModel.create(req.body);
-    res.status(200).json(createNewUser);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-
 export const findAllUsers = async (req, res) => {
   const findAll = await UserModel.findAll();
   res.status(200).json(findAll);
@@ -74,16 +35,6 @@ export const findUserById = async (req, res) => {
 export const updateUser = async (req, res) => {
   const userID = parseInt(req.params.id);
   const { username, email, password } = req.body;
-  const emailLength = await email.length;
-  const nameLength = await username.length;
-  const passwordLength = await password.length;
-  if (emailLength > 100 || nameLength > 20 || passwordLength > 255) {
-    return res.status(400).json({
-      message: "Error: Los atributos superan los 100 caracteres",
-      error: "Bad request",
-      status: 400,
-    });
-  }
   if (!username || !email || !password) {
     return res.status(400).json({
       message: "Error: Algunos campos están vacíos",
