@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 //Hasheo de contraseña y verificación//
 
 export const hashPassword = async (password) => {

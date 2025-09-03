@@ -1,17 +1,42 @@
 import { UserModel } from "../models/user.model.js";
 import { generateToken } from "../helpers/jwt.helper.js";
-import { hashPassword } from "../helpers/bcrypt.helper.js";
+import { hashPassword, comparePassword } from "../helpers/bcrypt.helper.js";
+import { ProfileModel } from "../models/profile.model.js";
 
 export const register = async (req, res) => {
-  const { username, email, password, role } = req.body;
+  const { username, email, password, role, first_name, last_name } = req.body;
   try {
     const hashedPassword = await hashPassword(password);
+
+    const checkIfUserExists = await UserModel.findOne({
+      where: { username: username },
+    });
+    if (checkIfUserExists) {
+      return res.status(400).json({
+        message: "Ese usuario ya está registrado",
+      });
+    }
+
+    const checkIfEmailExists = await UserModel.findOne({
+      where: { email: email },
+    });
+    if (checkIfEmailExists) {
+      return res.status(400).json({
+        message: "Ese email ya está registrado",
+      });
+    }
 
     const user = await UserModel.create({
       username: username,
       email: email,
       password: hashedPassword,
       role: role,
+    });
+
+    await ProfileModel.create({
+      first_name: first_name,
+      last_name: last_name,
+      user_id: user.id,
     });
 
     res.status(201).json({
