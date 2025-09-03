@@ -1,6 +1,6 @@
 import { UserModel } from "../models/user.model.js";
-import { comparePassword, generateToken } from "../helpers/jwt.helper.js";
-import { hashPassword } from "../helpers/jwt.helper.js";
+import { generateToken } from "../helpers/jwt.helper.js";
+import { hashPassword } from "../helpers/bcrypt.helper.js";
 
 export const register = async (req, res) => {
   const { username, email, password, role } = req.body;
@@ -11,7 +11,7 @@ export const register = async (req, res) => {
       username: username,
       email: email,
       password: hashedPassword,
-      role,
+      role: role,
     });
 
     res.status(201).json({
@@ -58,14 +58,4 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   res.clearCookie("token");
   return res.json({ message: "Logout exitoso" });
-};
-
-export const profile = (req, res) => {
-  return res.json({
-    user: {
-      id: req.user.id,
-      name: req.user.name,
-      role: req.user.role,
-    },
-  });
 };
