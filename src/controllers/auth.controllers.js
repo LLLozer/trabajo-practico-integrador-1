@@ -1,15 +1,17 @@
-import bcrypt from "bcrypt";
 import { UserModel } from "../models/user.model.js";
-import { generateToken } from "../helpers/jwt.helper.js";
+import { comparePassword, generateToken } from "../helpers/jwt.helper.js";
+import { hashPassword } from "../helpers/jwt.helper.js";
 
 export const register = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
+
     const user = await UserModel.create({
       username: username,
       email: email,
       password: hashedPassword,
+      role,
     });
 
     res.status(201).json({
@@ -31,7 +33,7 @@ export const login = async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: "Credenciales inválidas." });
     }
-    const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = await comparePassword(password, user.password);
     if (!validPassword) {
       return res.status(401).json({ message: "Credenciales inválidas" });
     }
