@@ -10,6 +10,7 @@ import { ArticleModel } from "./src/models/article.model.js";
 import { ArticleTagModel } from "./src/models/article_tag.model.js";
 import { authRoutes } from "./src/routes/auth.routes.js";
 import { userRoutes } from "./src/routes/user.routes.js";
+import { tagRoutes } from "./src/routes/tag.routes.js";
 
 const app = express();
 dotenv.config();
@@ -17,15 +18,16 @@ dotenv.config();
 const PORT = 3004;
 const corsOptions = {
   origin: `https://localhost:3004`,
-  credentials: true
+  credentials: true,
 };
 
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-app.use("/api/auth/", authRoutes)
-app.use("/api/", userRoutes)
+app.use("/api/auth/", authRoutes);
+app.use("/api/", userRoutes);
+app.use("/api/", tagRoutes);
 
 app.listen(PORT, async () => {
   DBStart();
