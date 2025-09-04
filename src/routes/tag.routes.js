@@ -9,12 +9,12 @@ import {
 import { authMiddleware } from "../middlewares/auth.js";
 import { authAdminMiddleware } from "../middlewares/authAdmin.js";
 
-export const taskRoutes = Router();
+export const tagRoutes = Router();
 
-taskRoutes.get("/tags", authMiddleware, findAllTags);
-taskRoutes.post("/tags", authMiddleware, authAdminMiddleware, createTag);
-taskRoutes.get("/tags/:id", authMiddleware, authAdminMiddleware, findTagById);
-taskRoutes.put("/tags/:id", authMiddleware, authAdminMiddleware, updateTag);
-taskRoutes.delete("/tags/:id", authMiddleware, authAdminMiddleware, deleteTag);
+tagRoutes.get("/tags", authMiddleware, findAllTags);
+tagRoutes.post("/tags", authMiddleware, authAdminMiddleware, createTag);
+tagRoutes.get("/tags/:id", authMiddleware, authAdminMiddleware, findTagById);
+tagRoutes.put("/tags/:id", authMiddleware, authAdminMiddleware, updateTag);
+tagRoutes.delete("/tags/:id", authMiddleware, authAdminMiddleware, deleteTag);
 
-export default taskRoutes;
+export default tagRoutes;

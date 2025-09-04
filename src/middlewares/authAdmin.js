@@ -4,7 +4,7 @@ export const authAdminMiddleware = (req, res, next) => {
   const userLogged = req.user;
   const token = req.cookies.token;
   if (!token) {
-    return res.status(401).json({ message: "No autenticado" });
+    return res.status(401).json({ message: "Usuario no autenticado" });
   }
   const decoded = verifyToken(token);
   req.userLogged = decoded;

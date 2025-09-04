@@ -115,3 +115,25 @@ export const profile = async (req, res) => {
     return res.status(500).json("Error interno del servidor.");
   }
 };
+
+export const updateProfile = async (req, res) => {
+  const userID = req.userLogged.id;
+  const { first_name, last_name, biography, avatar_url, birthday } = req.body;
+  try {
+    const userProfile = await ProfileModel.findOne({
+      where: { user_id: userID },
+    });
+    if (!userProfile) {
+      return res.status(404).json({
+        message: "No se encontró el perfil",
+        error: "Not found",
+        status: 404,
+      });
+    }
+    await userProfile.update(req.body);
+    res.status(200).json(req.body);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json("Error interno del servidor");
+  }
+};
