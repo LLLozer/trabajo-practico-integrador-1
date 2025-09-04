@@ -9,6 +9,7 @@ import { TagModel } from "./src/models/tag.model.js";
 import { ArticleModel } from "./src/models/article.model.js";
 import { ArticleTagModel } from "./src/models/article_tag.model.js";
 import { authRoutes } from "./src/routes/auth.routes.js";
+import { userRoutes } from "./src/routes/user.routes.js";
 
 const app = express();
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 app.use("/api/auth/", authRoutes)
+app.use("/api/", userRoutes)
 
 app.listen(PORT, async () => {
   DBStart();

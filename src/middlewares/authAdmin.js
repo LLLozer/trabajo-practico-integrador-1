@@ -1,6 +1,14 @@
+import { verifyToken } from "../helpers/jwt.helper.js";
+
 export const authAdminMiddleware = (req, res, next) => {
   const userLogged = req.user;
-  if (!decoded.role !== "admin") {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ message: "No autenticado" });
+  }
+  const decoded = verifyToken(token);
+  req.userLogged = decoded;
+  if (decoded.role !== "admin") {
     return res.status(401).json({
       msg: "Permiso denegado",
     });

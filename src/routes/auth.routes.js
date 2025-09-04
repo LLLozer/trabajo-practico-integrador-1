@@ -12,7 +12,7 @@ export const authRoutes = Router();
 
 authRoutes.post("/register", register);
 authRoutes.post("/login", login);
-authRoutes.post("/logout", logout);
+authRoutes.post("/logout", authMiddleware, logout);
 
 authRoutes.get("/profile", authMiddleware, profile);
 
