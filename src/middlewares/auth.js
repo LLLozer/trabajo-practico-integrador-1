@@ -8,6 +8,7 @@ export const authMiddleware = async (req, res, next) => {
     }
     const decoded = verifyToken(token);
     req.userLogged = decoded;
+    console.log(decoded)
     next();
   } catch (error) {
     res.status(500).json({ message: "Error interno en el servidor" });

@@ -1,5 +1,3 @@
-import { authMiddleware, userLogged } from "./auth.js";
-
 export const authAdminMiddleware = (req, res, next) => {
   const userLogged = req.user;
   if (!decoded.role !== "admin") {
