@@ -1,6 +1,8 @@
 import { TagModel } from "../models/tag.model.js";
 import { matchedData } from "express-validator";
 import { Op } from "sequelize";
+import { ArticleModel } from "../models/article.model.js";
+import { ArticleTagModel } from "../models/article_tag.model.js";
 
 export const createTag = async (req, res) => {
   const { name } = req.body;
@@ -45,7 +47,15 @@ export const findTagById = async (req, res) => {
       });
     }
 
-    const findID = await TagModel.findByPk(tagID);
+    const findID = await TagModel.findByPk(tagID, {
+      include: {
+        model: ArticleModel,
+        as: "articles",
+        through: {
+          attributes: [],
+        },
+      },
+    });
 
     if (!findID) {
       return res.status(404).json({
@@ -56,6 +66,7 @@ export const findTagById = async (req, res) => {
     }
     res.status(200).json(findID);
   } catch (error) {
+    console.log(error)
     return res.status(500).json("Error: No se pudo encontrar el ID");
   }
 };

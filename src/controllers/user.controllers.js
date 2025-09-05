@@ -1,8 +1,15 @@
+import { ArticleModel } from "../models/article.model.js";
+import { ProfileModel } from "../models/profile.model.js";
 import { UserModel } from "../models/user.model.js";
 import { matchedData } from "express-validator";
 
 export const findAllUsers = async (req, res) => {
-  const findAll = await UserModel.findAll();
+  const findAll = await UserModel.findAll({
+    include: {
+      model: ProfileModel,
+      as: "profile",
+    },
+  });
   res.status(200).json(findAll);
 };
 
@@ -17,7 +24,16 @@ export const findUserById = async (req, res) => {
       });
     }
 
-    const findID = await UserModel.findByPk(userID);
+    const findID = await UserModel.findByPk(userID, {
+      include: {
+        model: ProfileModel,
+        as: "profile",
+      },
+      include: {
+        model: ArticleModel,
+        as: "articles",
+      },
+    });
 
     if (!findID) {
       return res.status(404).json({
@@ -28,6 +44,7 @@ export const findUserById = async (req, res) => {
     }
     res.status(200).json(findID);
   } catch (error) {
+    console.log(error)
     return res.status(500).json("Error: No se pudo encontrar el ID");
   }
 };
