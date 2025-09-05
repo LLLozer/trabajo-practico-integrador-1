@@ -1,6 +1,5 @@
 import { ArticleModel } from "../models/article.model.js";
 import { matchedData } from "express-validator";
-import { Op } from "sequelize";
 
 export const createArticle = async (req, res) => {
   const { title, content, excerpt, status } = req.body;
@@ -126,10 +125,10 @@ export const deleteArticle = async (req, res) => {
       });
     }
     const deleteArticle = await findID.destroy();
-    res.status(200).json("Etiqueta eliminada.");
+    res.status(200).json("Artículo eliminado.");
   } catch (error) {
     return res(500).json({
-      message: "Error: Error al eliminar la etiqueta",
+      message: "Error: Error al eliminar el artículo",
       error: "Internal server error",
       status: 500,
     });

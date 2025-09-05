@@ -11,6 +11,7 @@ import { ArticleTagModel } from "./src/models/article_tag.model.js";
 import { authRoutes } from "./src/routes/auth.routes.js";
 import { userRoutes } from "./src/routes/user.routes.js";
 import { tagRoutes } from "./src/routes/tag.routes.js";
+import { articleRoutes } from "./src/routes/article.routes.js";
 
 const app = express();
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use("/api/auth/", authRoutes);
 app.use("/api/", userRoutes);
 app.use("/api/", tagRoutes);
+app.use("/api", articleRoutes);
 
 app.listen(PORT, async () => {
   DBStart();
