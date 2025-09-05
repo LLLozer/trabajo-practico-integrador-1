@@ -6,6 +6,9 @@ export const ownerMiddleware = async (req, res, next) => {
     const user = req.userLogged;
     const article = await ArticleModel.findByPk(req.params.id);
     const articleUserID = article.dataValues.user_id;
+    console.log(articleUserID);
+    console.log(user.id);
+    console.log(user.role);
     if (user.role === "admin" || user.id === articleUserID) {
       return next();
     }

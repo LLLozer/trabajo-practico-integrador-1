@@ -19,17 +19,11 @@ articleRoutes.put(
   "/articles/:id",
   authMiddleware,
   ownerMiddleware,
-  //authOwnerMiddleware,
-  // updateArticle,
-  authAdminMiddleware,
   updateArticle
 );
 articleRoutes.delete(
   "/articles/:id",
   authMiddleware,
   ownerMiddleware,
-  //authOwnerMiddleware,
-  // deleteArticle,
-  authAdminMiddleware,
   deleteArticle
 );
