@@ -6,8 +6,11 @@ export const createUserValidation = [
   body("username")
     .trim()
     .isLength({ min: 3, max: 20 })
+    .withMessage("El campo username debe contener entre 3 y 20 caracteres")
     .custom(async (value) => {
-      const userExists = UserModel.findOne({ where: { username: value } });
+      const userExists = await UserModel.findOne({
+        where: { username: value },
+      });
       if (userExists) {
         throw new Error("Ese usuario ya está registrado");
       }
@@ -21,21 +24,30 @@ export const createUserValidation = [
     .trim()
     .isEmail()
     .custom(async (value) => {
-      const emailExists = UserModel.findOne({ where: { email: value } });
+      const emailExists = await UserModel.findOne({ where: { email: value } });
       if (emailExists) {
         throw new Error("Ese email ya se ha registrado.");
       }
     }),
   body("password")
-    .length({ min: 8 })
-    .matches("/^(?=.*[a-z])(?*=.[A-Z])(?=.*d)[A-Za-zd]{8,}$/")
+    .isStrongPassword({
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 0,
+    })
     .withMessage(
-      "El password debe tener al menos una minúscula, una mayúscula y un número"
+      "El password debe tener al menos una minúscula, una mayúscula y un número, y debe tener al menos 8 caracteres"
     ),
-  body("role").custom((async) => {
-    if (param.UserModel.role !== "user" || "admin")
-      throw new Error("El campo role solo acepta user o admin");
-  }),
+  body("role")
+    .optional()
+    .custom(async (value) => {
+      const admittedRoles = ["user", "admin"];
+      if (!admittedRoles.includes(value)) {
+        throw new Error("El campo role solo admite user o admin");
+      }
+    }),
 ];
 
 export const updateUserValidation = [
@@ -60,7 +72,7 @@ export const updateUserValidation = [
     .optional()
     .isEmail()
     .custom(async (value) => {
-      const emailExists = UserModel.findOne({
+      const emailExists = await UserModel.findOne({
         where: { email: value, id: { [Op.ne]: req.params.id } },
       });
       if (emailExists) {
@@ -70,16 +82,23 @@ export const updateUserValidation = [
   body("password")
     .trim()
     .optional()
-    .length({ min: 8 })
-    .matches("/^(?=.*[a-z])(?*=.[A-Z])(?=.*d)[A-Za-zd]{8,}$/")
+    .isStrongPassword({
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 0,
+    })
     .withMessage(
       "El password debe tener al menos una minúscula, una mayúscula y un número"
     ),
   body("role")
     .optional()
-    .custom((async) => {
-      if (param.UserModel.role !== "user" || "admin")
-        throw new Error("El campo role solo acepta user o admin");
+    .custom(async (value) => {
+      const admittedRoles = ["user", "admin"];
+      if (!admittedRoles.includes(value)) {
+        throw new Error("El campo role solo admite user o admin");
+      }
     }),
 ];
 

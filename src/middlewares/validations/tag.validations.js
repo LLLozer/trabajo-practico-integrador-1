@@ -1,7 +1,7 @@
-import { TagModel } from "../../models/tag.model";
+import { TagModel } from "../../models/tag.model.js";
 import { body, param } from "express-validator";
 
-const createTagValidation = [
+export const createTagValidation = [
   body("name")
     .custom(async (value) => {
       const tagExists = await TagModel.findOne({
@@ -19,7 +19,7 @@ const createTagValidation = [
     .withMessage("La longitud debe ser entre 2 y 30 caracteres"),
 ];
 
-const updateTagValidation = [
+export const updateTagValidation = [
   param("id")
     .exists()
     .isInt({ min: 1 })
@@ -59,7 +59,7 @@ export const getTagIDValidation = [
     }),
 ];
 
-export const deleteTaskValidation = [
+export const deleteTagValidation = [
   param("id")
     .exists()
     .isInt({ min: 1 })

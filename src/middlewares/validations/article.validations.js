@@ -1,6 +1,5 @@
 import { body, param } from "express-validator";
 import { ArticleModel } from "../../models/article.model.js";
-import { updateArticle } from "../../controllers/article.controllers.js";
 
 export const createArticleValidation = [
   body("title")
@@ -16,6 +15,12 @@ export const createArticleValidation = [
   body("excerpt")
     .isLength({ max: 500 })
     .withMessage("El máximo de caracteres es 500"),
+  body("status").custom(async (value) => {
+    const validStatuses = ["published", "archived"];
+    if (!validStatuses.includes(value)) {
+      throw new Error("Status solo admite published o archived");
+    }
+  }),
 ];
 
 export const updateArticleValidation = [
@@ -45,6 +50,14 @@ export const updateArticleValidation = [
     .optional()
     .isLength({ max: 500 })
     .withMessage("El máximo de caracteres es 500"),
+  body("status")
+    .optional()
+    .custom(async (value) => {
+    const validStatuses = ["published", "archived"];
+    if (!validStatuses.includes(value)) {
+      throw new Error("Status solo admite published o archived");
+    }
+  }),
 ];
 
 export const getArticleIDValidation = [
